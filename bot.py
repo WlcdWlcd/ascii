@@ -12,8 +12,10 @@ class Bot():
         self.init_welcome()
         self.init_image()
         self.init_start_render()
+
         self.default_font_size = 14
         self.default_distance = 14
+        self.default_expand_layout = False
         print("bot initialized successfully")
 
 
@@ -46,7 +48,6 @@ class Bot():
                 return
             
             elif data.startswith("+") or data.startswith("-"):
-                print(message)
                 caption = Caption.from_text(message.caption)
                 literal = data[0]
                 parameter = data[1::]
@@ -60,6 +61,20 @@ class Bot():
                     caption.font_size+=change
                 self.bot.edit_message_caption(chat_id = message.chat.id,message_id =message.id,caption = caption.generate())
                 self.bot.edit_message_reply_markup(message.chat.id,message.id,reply_markup = keyboards.keyboards[parameter].keyboard())
+            elif data.startswith("!"):
+                caption = Caption.from_text(message.caption)
+                literal = data[0]
+                parameter = data[1::]
+                print(parameter)
+                print(caption.expand_layout)
+                if parameter == 'expand_layout':
+                    caption.expand_layout = not caption.expand_layout
+                print(caption.expand_layout)
+
+                self.bot.edit_message_caption(chat_id = message.chat.id,message_id = message.id,caption = caption.generate())
+                self.bot.edit_message_reply_markup(message.chat.id,message.id,reply_markup = keyboards.keyboards["choice_keyboard"].keyboard())
+                
+                
             elif not data.startswith("="):
                 self.bot.edit_message_reply_markup(message.chat.id,message.id,reply_markup = keyboards.keyboards[callback.data].keyboard())
                 return
@@ -95,7 +110,7 @@ class Bot():
         
 
     def reply_ascii_art_settings(self,message):
-        caption=Caption(self.default_distance,self.default_font_size)
+        caption=Caption(self.default_distance,self.default_font_size,self.default_expand_layout)
         result_image = self.render(message,caption)
         result_image.save()
         
@@ -110,9 +125,10 @@ class Bot():
 
 
 class Caption():
-    def __init__(self,distance,font_size):
+    def __init__(self,distance,font_size,expand_layout):
         self.distance = distance
         self.font_size = font_size
+        self.expand_layout = expand_layout
 
     def from_text(text):
         for i in text.splitlines():
@@ -120,11 +136,19 @@ class Caption():
                 distance = int(i.split(":")[1].strip())
             elif i.startswith("размер шрифта:"):
                 font_size = int(i.split(":")[1].strip())
+            elif i.startswith("развернуть раскладку:"):
+                value = (i.split(":")[1].strip())
+                print(value)
+                if value =="❌":
+                    expand_layout = False
+                else:
+                    expand_layout = True
 
-        return Caption(distance,font_size)
+        return Caption(distance,font_size,expand_layout)
     def generate(self):
         return f"\
 Дистанция: {self.distance}\n\
-размер шрифта: {self.font_size}"
+размер шрифта: {self.font_size}\n\
+развернуть раскладку: {'✅' if self.expand_layout else '❌'}"
 
     

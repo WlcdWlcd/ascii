@@ -35,6 +35,7 @@ class choice_markup(KeyboardMarkup):
 
         self.buttons = [ font_size_settings.get_redirect_button(),
                         distance_settings.get_redirect_button()]
+        self.expand_layout_button = InlineKeyboardButton("развернуть раскладку", callback_data = "!expand_layout" )
 
         self.render_button = InlineKeyboardButton("начать обработку", callback_data = "render" )
         self.save_button = InlineKeyboardButton("получить без сжатия",callback_data = "save")
@@ -43,7 +44,7 @@ class choice_markup(KeyboardMarkup):
         keyboard = InlineKeyboardMarkup()
         for button in self.buttons:
             keyboard.add(button)
-        
+        keyboard.add(self.expand_layout_button)
         keyboard.add(self.render_button)
         keyboard.add(self.save_button)
         return keyboard
