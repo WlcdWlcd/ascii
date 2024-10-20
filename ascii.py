@@ -19,7 +19,9 @@ class color_scheme:
 class Ascii(color_scheme):
     def __init__(self,path,parameters):
         self.path = path
-        self.chars = ' .",:;!~+-xmo*#W&8@'[::1]
+        self.chars = ' .",:;!~+-xmo*#W&8@'
+        if parameters.expand_layout:
+            self.chars = self.chars[::-1]
         self.char_coefficent = len(self.chars)/255
         color_scheme.__init__(self)
         self.source_image = Pillow_image.from_path(self.path)
@@ -61,7 +63,7 @@ class Ascii(color_scheme):
 
             if True: #TODO: add bool value and else here
                 fill_color = pixel
-
+                fill_color = (255,255,255)
             self.draw.text(coordinates,
                             char,
                             fill=fill_color,
