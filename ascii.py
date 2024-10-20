@@ -22,12 +22,15 @@ class Ascii(color_scheme):
         self.chars = ' .",:;!~+-xmo*#W&8@'
         if parameters.expand_layout:
             self.chars = self.chars[::-1]
+        print(parameters.original_colors)
+        self.is_original_colors = parameters.original_colors
         self.char_coefficent = len(self.chars)/255
         color_scheme.__init__(self)
         self.source_image = Pillow_image.from_path(self.path)
         self.source_npArray = self.source_image.get_npArray()
         self.distance = parameters.distance
         self.font_size = parameters.font_size
+
 
         self.height = len(self.source_npArray)
         self.width = len(self.source_npArray[0])
@@ -60,10 +63,14 @@ class Ascii(color_scheme):
             char_index = int(self.char_coefficent*pixel[0])-1
             char = self.chars[char_index]
 
+            
 
-            if True: #TODO: add bool value and else here
+            if self.is_original_colors: #TODO: add bool value and else here
                 fill_color = pixel
+            else:
                 fill_color = (255,255,255)
+            
+
             self.draw.text(coordinates,
                             char,
                             fill=fill_color,
