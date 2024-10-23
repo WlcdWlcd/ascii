@@ -19,8 +19,8 @@ class color_scheme:
 class Ascii(color_scheme):
     def __init__(self,path,parameters):
         self.path = path
-        self.chars = ' .",:;!~+-xmo*#W&8@'
-        if parameters.expand_layout:
+        self.chars = '   .",:;!~+-xmo*#W&8@'
+        if not parameters.expand_layout:
             self.chars = self.chars[::-1]
         print(parameters.original_colors)
         self.is_original_colors = parameters.original_colors
@@ -29,7 +29,7 @@ class Ascii(color_scheme):
         self.source_image = Pillow_image.from_path(self.path)
         self.source_npArray = self.source_image.get_npArray()
         self.distance = parameters.distance
-        self.font_size = parameters.font_size
+        self.font_size = parameters.font_size*2
 
 
         self.height = len(self.source_npArray)
@@ -58,9 +58,12 @@ class Ascii(color_scheme):
             pixel = tuple(self.source_npArray[y][x])
 
             while len(pixel)<3:
-                pixel = tuple(pixel + (0,))
+                pixel = tuple(pixel + (pixel[0]))
 
-            char_index = int(self.char_coefficent*pixel[0])-1
+            avg_color = sum(pixel)
+            
+            char_index = int(self.char_coefficent*avg_color)-1
+            
             char = self.chars[char_index]
 
             
@@ -75,8 +78,9 @@ class Ascii(color_scheme):
                             char,
                             fill=fill_color,
                             font = self.fnt)
-        except Exception:
-            pass   
+        except Exception as e:
+            print(len(self.chars)-1 - char_index)
+            print(f"error: {e}")   
 
 class Pillow_image(Photo):
     def __init__(self, path):
