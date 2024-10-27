@@ -59,7 +59,7 @@ class Ascii(color_scheme):
             while len(pixel)<3:
                 pixel = tuple(pixel + (pixel[0]))
 
-            avg_color = sum(pixel)
+            avg_color = sum(pixel)//3
             
             char_index = int(self.char_coefficent*avg_color)-1
             
