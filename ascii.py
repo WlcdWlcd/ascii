@@ -22,7 +22,6 @@ class Ascii(color_scheme):
         self.chars = '   .",:;!~+-xmo*#W&8@'
         if not parameters.expand_layout:
             self.chars = self.chars[::-1]
-        print(parameters.original_colors)
         self.is_original_colors = parameters.original_colors
         self.char_coefficent = len(self.chars)/255
         color_scheme.__init__(self)
