@@ -4,6 +4,7 @@ from telebot.types import InputFile, InlineKeyboardButton,InputMediaPhoto
 from Photo import telegram_Photo
 from ascii import Ascii
 import keyboards
+from config import bot_config
 
 class Bot():
     def __init__(self, token):
@@ -13,10 +14,10 @@ class Bot():
         self.init_image()
         self.init_start_render()
 
-        self.default_font_size = 14
-        self.default_distance = 14
-        self.default_expand_layout = False
-        self.default_original_colors = True
+        self.default_font_size = bot_config.default_font_size
+        self.default_distance = bot_config.default_distance
+        self.default_expand_layout = bot_config.default_expand_layout
+        self.default_original_colors = bot_config.default_original_colors
         print("bot initialized successfully")
 
 

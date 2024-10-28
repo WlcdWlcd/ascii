@@ -1,8 +1,7 @@
 from Photo import Photo
 import numpy as np
 from PIL import Image,ImageDraw,ImageFont
-
-
+from config import engine_config
 class Ascii_art(Photo):
     def __init__():
         pass
@@ -18,7 +17,7 @@ class color_scheme:
 
 class Ascii(color_scheme):
     def __init__(self,path,parameters):
-        self.image_scale = 3
+        self.image_scale = engine_config.image_scale
         self.distance = parameters.distance
         self.font_size = parameters.font_size
 
@@ -68,7 +67,6 @@ class Ascii(color_scheme):
                 char_index = len(self.chars)-1
             
             char = self.chars[char_index]
-            print(avg_color)
 
             if self.is_original_colors: 
                 fill_color = pixel
